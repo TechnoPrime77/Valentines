@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Valentine's Day</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #ffcccc, #ff9999);
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #d63384;
+        }
+        .heart {
+            font-size: 50px;
+            color: red;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        button {
+            background-color: #d63384;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #b0246a;
+        }
+        .hidden {
+            display: none;
+        }
+        .letter {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        .interactive {
+            margin: 20px 0;
+        }
+        .hearts-rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .heart-rain {
+            position: absolute;
+            font-size: 24px;
+            color: red;
+            animation: fall 5s linear infinite;
+        }
+        @keyframes fall {
+            0% { top: -10%; opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-rain" id="heartsRain"></div>
+    <div class="container">
+        <h1>Happy Valentine's Day, My Love! <span class="heart">❤️</span></h1>
+        <p>I've prepared something special for you. Let's start our romantic journey...</p>
+        
+        <div class="interactive">
+            <button id="startBtn">Click to Begin</button>
+        </div>
+        
+        <div id="part1" class="hidden">
+            <h2>Part 1: A Little Poem</h2>
+            <p>Roses are red,<br>Violets are blue,<br>My heart beats for you,<br>Forever true.</p>
+            <button id="next1Btn">Continue</button>
+        </div>
+        
+        <div id="part2" class="hidden">
+            <h2>Part 2: Our Memories</h2>
+            <p>Remember that first date? The way you smiled lit up my world. Every moment with you is a treasure.</p>
+            <button id="next2Btn">Keep Going</button>
+        </div>
+        
+        <div id="part3" class="hidden">
+            <h2>Part 3: The Buildup</h2>
+            <p>With each passing day, my love for you grows stronger. You're my everything.</p>
+            <button id="revealBtn">Reveal the Letter</button>
+        </div>
+        
+        <div id="letter" class="hidden letter">
+            <h2>My Dearest Love,</h2>
+            <p>From the moment I met you, I knew you were special. Your smile, your laugh, your kindness – they all make my heart skip a beat. Happy Valentine's Day! I love you more than words can say.</p>
+            <p>Yours forever,<br>[Your Name]</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to create falling hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart-rain';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            document.getElementById('heartsRain').appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+
+        // Start the hearts rain
+        setInterval(createHeart, 300);
+
+        // Interactive elements
+        document.getElementById('startBtn').addEventListener('click', () => {
+            document.getElementById('part1').classList.remove('hidden');
+            document.getElementById('startBtn').style.display = 'none';
+        });
+
+        document.getElementById('next1Btn').addEventListener('click', () => {
+            document.getElementById('part1').classList.add('hidden');
+            document.getElementById('part2').classList.remove('hidden');
+        });
+
+        document.getElementById('next2Btn').addEventListener('click', () => {
+            document.getElementById('part2').classList.add('hidden');
+            document.getElementById('part3').classList.remove('hidden');
+        });
+
+        document.getElementById('revealBtn').addEventListener('click', () => {
+            document.getElementById('part3').classList.add('hidden');
+            document.getElementById('letter').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
