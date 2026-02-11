@@ -1,278 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>For My Valentine</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Forgotten Letter</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display&display=swap" rel="stylesheet">
 
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+*{margin:0;padding:0;box-sizing:border-box}
 
-body {
-  height: 100svh;
-  background: linear-gradient(135deg, #3a0f1f, #7a1f3d, #b23a5f);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Playfair Display', serif;
-  overflow: hidden;
-  -webkit-tap-highlight-color: transparent;
+body{
+  height:100vh;
+  background:#1a1412;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  font-family:'Playfair Display',serif;
 }
 
-/* ❤️ Floating hearts */
-.heart {
-  position: fixed;
-  bottom: -10px;
-  color: rgba(255,255,255,0.8);
-  pointer-events: none;
-  animation: floatUp linear infinite;
-  z-index: 0;
+/* Candle Glow Background */
+body::before{
+  content:"";
+  position:absolute;
+  width:600px;
+  height:600px;
+  background:radial-gradient(circle, rgba(255,180,80,0.35) 0%, transparent 70%);
+  animation:flicker 3s infinite alternate ease-in-out;
 }
 
-@keyframes floatUp {
-  to {
-    transform: translateY(-120vh) scale(1.2);
-    opacity: 0;
-  }
+@keyframes flicker{
+  0%{opacity:0.8;transform:scale(1);}
+  50%{opacity:0.6;transform:scale(1.05);}
+  100%{opacity:0.9;transform:scale(0.98);}
 }
 
-/* 🎶 Music button */
-.music-btn {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  background: rgba(255,255,255,0.25);
-  border: none;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  z-index: 5;
+/* Envelope */
+.envelope{
+  width:320px;
+  height:200px;
+  background:#f0f0f0;
+  position:relative;
+  border-radius:8px;
+  cursor:pointer;
+  box-shadow:0 20px 40px rgba(0,0,0,0.6);
+  transition:transform 0.8s ease;
+  z-index:2;
 }
 
-/* ✉️ Envelope */
-.envelope {
-  width: 85vw;
-  max-width: 360px;
-  aspect-ratio: 16 / 10;
-  position: relative;
-  background: #fff0f5;
-  border-radius: 10px;
-  cursor: pointer;
-  transform-style: preserve-3d;
-  transition: transform 0.9s cubic-bezier(.4,0,.2,1);
-  box-shadow: 0 25px 50px rgba(0,0,0,0.45);
-  z-index: 2;
+.flap{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:#e0e0e0;
+  clip-path:polygon(0 0,100% 0,50% 60%);
+  transform-origin:top;
+  transition:transform 0.8s ease;
 }
 
-.envelope.open {
-  transform: scale(1.05);
+.envelope.open .flap{
+  transform:rotateX(-160deg);
 }
 
-/* Flap */
-.flap {
-  position: absolute;
-  inset: 0;
-  background: #ffd6e3;
-  clip-path: polygon(0 0, 100% 0, 50% 55%);
-  transform-origin: top;
-  transition: transform 0.8s cubic-bezier(.4,0,.2,1);
-  z-index: 2;
+/* Hidden Pen */
+.hidden-pen{
+  position:absolute;
+  width:50px;
+  right:-25px;
+  bottom:-25px;
+  opacity:0;
+  cursor:pointer;
+  transition:opacity 1s ease;
 }
 
-.envelope.open .flap {
-  transform: rotateX(-160deg);
+.envelope.open + .hidden-pen{
+  opacity:1;
 }
 
-/* Letter */
-.letter {
-  position: absolute;
-  inset: 8px;
-  background: #ffffff;
-  padding: 18px 16px 60px;
-  border-radius: 8px;
-  opacity: 0;
-  transform: translateY(30px) scale(0.96);
-  transition: all 0.8s cubic-bezier(.4,0,.2,1);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  z-index: 1;
+/* Paper */
+.paper{
+  position:absolute;
+  width:360px;
+  height:460px;
+  background:#d8c7a1;
+  border-radius:6px;
+  padding:50px 40px;
+  display:none;
+  box-shadow:0 20px 40px rgba(0,0,0,0.7);
+  background-image:radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size:4px 4px;
+  z-index:1;
 }
 
-.envelope.open .letter {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+.dialogue{
+  text-align:center;
+  margin-top:120px;
+  font-size:18px;
+  opacity:0;
+  transition:opacity 1s ease;
 }
 
-h1 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
+.letter-text{
+  font-family:'Great Vibes',cursive;
+  font-size:28px;
+  line-height:1.5;
+  white-space:pre-wrap;
 }
 
-p {
-  font-size: 0.95rem;
-  line-height: 1.7;
-  margin-bottom: 10px;
+.final-line{
+  opacity:0;
+  text-align:center;
+  margin-top:25px;
+  font-size:34px;
+  font-family:'Great Vibes',cursive;
+  transition:opacity 2s ease;
 }
 
-/* ❤️ Final line */
-.love-line {
-  opacity: 0;
-  text-align: center;
-  font-size: 1.1rem;
-  margin-top: 18px;
-  transition: opacity 2s ease, transform 2s ease;
-  transform: scale(0.95);
-}
-
-.envelope.open .love-line {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Close button */
-.close {
-  position: absolute;
-  bottom: 10px;
-  right: 12px;
-  background: rgba(0,0,0,0.05);
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-size: 18px;
-}
-
-/* Hint */
-.hint {
-  position: absolute;
-  bottom: -40px;
-  width: 100%;
-  text-align: center;
-  color: rgba(255,255,255,0.85);
-  font-size: 0.85rem;
+/* Writing Pen Animation */
+.writing-pen{
+  position:absolute;
+  width:40px;
+  display:none;
+  pointer-events:none;
 }
 </style>
 </head>
-
 <body>
-
-<!-- 🎶 Background Music -->
-<audio id="bgMusic" loop>
-  <source src="love-music.mp3" type="audio/mpeg">
-</audio>
-
-<button class="music-btn" id="musicBtn" onclick="toggleMusic()">▶ Music</button>
 
 <div class="envelope" id="envelope">
   <div class="flap"></div>
-
-  <div class="letter" onclick="event.stopPropagation()">
-    <button class="close" onclick="closeLetter(event)">×</button>
-
-    <h1>My love,</h1>
-
-    <p>
-      Loving you feels like discovering home in a person.
-      With you, I don’t have to rush, pretend, or hide —
-      I simply exist, and that feels like peace.
-    </p>
-
-    <p>
-      You are my favorite thought at random hours,
-      the reason my smile appears without warning.
-      Every little thing about you finds its way into my heart
-      and settles there, comfortably.
-    </p>
-
-    <p>
-      This Valentine’s Day isn’t about grand gestures.
-      It’s about choosing you — in quiet moments,
-      in laughter, in silence, and in everything in between.
-    </p>
-
-    <p>
-      If I could give you one thing,
-      it would be the ability to see yourself through my eyes —
-      because then you’d know
-      just how deeply loved you are.
-    </p>
-
-    <div class="love-line">Forever my Valentine 💘</div>
-
-    <p style="text-align:right;">— Aaron</p>
-  </div>
-
-  <div class="hint">Tap gently ❤️</div>
 </div>
 
+<img src="https://cdn-icons-png.flaticon.com/512/3103/3103446.png" class="hidden-pen" id="pen">
+
+<div class="paper" id="paper">
+  <div class="dialogue" id="dialogue">
+    Oh no... I forgot to write in it.
+    <br><br>
+    Maybe there's a pen somewhere...
+  </div>
+  <div class="letter-text" id="letter"></div>
+  <div class="final-line" id="finalLine">I love you.</div>
+</div>
+
+<img src="https://cdn-icons-png.flaticon.com/512/3103/3103446.png" class="writing-pen" id="writingPen">
+
+<audio id="music" src="love.mp3"></audio>
+
 <script>
-const envelope = document.getElementById('envelope');
-const music = document.getElementById('bgMusic');
-const musicBtn = document.getElementById('musicBtn');
+const envelope=document.getElementById("envelope");
+const paper=document.getElementById("paper");
+const dialogue=document.getElementById("dialogue");
+const pen=document.getElementById("pen");
+const writingPen=document.getElementById("writingPen");
+const letter=document.getElementById("letter");
+const music=document.getElementById("music");
+const finalLine=document.getElementById("finalLine");
 
-let musicStarted = false;
-let fadeInterval = null;
+const text=`My love,
 
-/* 🎶 Fade-in music */
-function fadeInMusic() {
-  music.volume = 0;
-  music.play().catch(() => {});
-  let vol = 0;
-  fadeInterval = setInterval(() => {
-    if (vol < 0.35) {
-      vol += 0.02;
-      music.volume = vol;
-    } else {
-      clearInterval(fadeInterval);
-    }
-  }, 120);
-}
+I thought I had prepared something perfect for you.
+But maybe perfection isn’t written beforehand —
+maybe it’s created in the moment.
 
-/* 📩 Open letter */
-envelope.addEventListener('click', () => {
-  if (!envelope.classList.contains('open')) {
-    envelope.classList.add('open');
+You are the warmth in my winters,
+the calm in my chaos,
+the softest part of my every day.
 
-    if (!musicStarted) {
-      fadeInMusic();
-      musicStarted = true;
-      musicBtn.textContent = '⏸ Music';
-    }
-  }
+If this letter seems unfinished,
+it’s because my love for you is still being written.
+Every heartbeat adds another word.
+Every memory adds another line.
+
+And today,
+on Valentine’s Day,
+I just want you to know —
+
+you are my always.`;
+
+envelope.addEventListener("click",()=>{
+  envelope.classList.add("open");
+  setTimeout(()=>{
+    paper.style.display="block";
+    setTimeout(()=>dialogue.style.opacity="1",500);
+  },800);
 });
 
-/* ❌ Close letter */
-function closeLetter(e) {
-  e.stopPropagation();
-  envelope.classList.remove('open');
-  music.pause();
-  musicBtn.textContent = '▶ Music';
-}
+pen.addEventListener("click",()=>{
+  dialogue.style.opacity="0";
+  setTimeout(()=>{
+    startWriting();
+  },800);
+});
 
-/* 🔊 Manual toggle */
-function toggleMusic() {
-  if (music.paused) {
-    music.play();
-    musicBtn.textContent = '⏸ Music';
-  } else {
-    music.pause();
-    musicBtn.textContent = '▶ Music';
+function startWriting(){
+  music.play();
+  writingPen.style.display="block";
+  let i=0;
+
+  function type(){
+    if(i<text.length){
+      letter.textContent+=text.charAt(i);
+
+      // Move pen position
+      writingPen.style.left = (paper.offsetLeft + 60 + (i%30)*6) + "px";
+      writingPen.style.top = (paper.offsetTop + 80 + Math.floor(i/30)*28) + "px";
+
+      i++;
+      setTimeout(type,40);
+    } else {
+      writingPen.style.display="none";
+      setTimeout(()=>{
+        finalLine.style.opacity="1";
+      },1000);
+    }
   }
-}
-
-/* ❤️ Generate floating hearts */
-for (let i = 0; i < 30; i++) {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerHTML = "❤";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.animationDuration = (6 + Math.random() * 6) + "s";
-  heart.style.opacity = Math.random();
-  heart.style.fontSize = (12 + Math.random() * 14) + "px";
-  document.body.appendChild(heart);
+  type();
 }
 </script>
 
