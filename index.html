@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine Letter</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
-
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
+*{margin:0;padding:0;box-sizing:border-box;}
 
-body {
+body{
   height:100svh;
   background: linear-gradient(135deg, #3a0f1f, #7a1f3d, #b23a5f);
   display:flex;
@@ -21,7 +19,7 @@ body {
 }
 
 /* Floating hearts */
-.heart {
+.heart{
   position: fixed;
   bottom:-10px;
   color: rgba(255,255,255,0.8);
@@ -29,15 +27,13 @@ body {
   animation: floatUp linear infinite;
   z-index:0;
 }
-
-@keyframes floatUp {
-  to { transform: translateY(-120vh) scale(1.2); opacity:0; }
+@keyframes floatUp{
+  to{transform: translateY(-120vh) scale(1.2);opacity:0;}
 }
 
 /* Envelope */
-.envelope {
-  width:85vw;
-  max-width:360px;
+.envelope{
+  width:85vw; max-width:360px;
   aspect-ratio:16/10;
   position:relative;
   background:#fff0f5;
@@ -49,61 +45,62 @@ body {
   z-index:2;
 }
 
-.envelope.open { transform: scale(1.05); }
+.envelope.open{transform: scale(1.05);}
+.envelope.writing{transform: scale(0.8) translateY(60px);opacity:0.4;}
 
-.flap {
-  position:absolute;
-  inset:0;
+.flap{
+  position:absolute; inset:0;
   background:#ffd6e3;
   clip-path: polygon(0 0, 100% 0, 50% 55%);
   transform-origin: top;
   transition: transform 0.8s cubic-bezier(.4,0,.2,1);
   z-index:2;
 }
-
-.envelope.open .flap { transform: rotateX(-160deg); }
+.envelope.open .flap{transform: rotateX(-160deg);}
 
 /* Paper */
-.paper {
+.paper{
   position:absolute;
-  width:340px;
-  height:500px;
+  top:50%; left:50%;
+  width:340px; height:500px;
   background:#fff8e7;
   padding:40px;
   box-shadow:0 30px 60px rgba(0,0,0,0.5);
   display:none;
   z-index:3;
   border:2px solid #f3d1dc;
+  border-radius:12px;
+  transform: translate(-50%,-50%);
   transition: transform 0.8s ease, opacity 0.8s ease;
   overflow:hidden;
+  background-image: linear-gradient(0deg, rgba(255,220,230,0.1) 1px, transparent 1px);
+  background-size: 1em 1em;
 }
 
-.paper.out { transform: translateY(-20px) scale(1.05); }
+.paper.out{transform: translate(-50%,-60%) scale(1.05);}
 
 /* Paper content */
-.paper-content {
-  width:100%;
-  height:100%;
-  overflow-y:auto;
+.paper-content{
+  width:100%; height:100%; overflow-y:auto;
 }
 
-.dialogue {
+.dialogue{
   text-align:center;
   font-size:0.95rem;
   color:#fff;
   position:absolute;
-  top:-50px;
+  top:-40px;
   width:100%;
 }
 
-.writing-text {
+.writing-text{
   font-family:'Great Vibes', cursive;
   font-size:1.1rem;
   line-height:1.7;
   white-space: pre-wrap;
 }
 
-.love-line {
+.love-line{
   opacity:0;
   text-align:center;
   font-size:1.1rem;
@@ -113,42 +110,54 @@ body {
 }
 
 /* Close button */
-.close {
+.close{
   position:absolute;
   bottom:10px;
   right:12px;
   background: rgba(0,0,0,0.05);
   border:none;
   border-radius:50%;
-  width:36px;
-  height:36px;
+  width:36px; height:36px;
   font-size:18px;
   cursor:pointer;
 }
 
-/* Fountain pen */
-.pen {
-  position: fixed;
+/* Pen (CSS circle+triangle nib) */
+.pen{
+  position:fixed;
   left:40px;
   bottom:60px;
-  width:90px;
+  width:50px; height:50px;
   cursor:pointer;
   z-index:4;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+}
+.pen-body{
+  width:6px; height:40px;
+  background:#333;
+  border-radius:3px;
+}
+.pen-nib{
+  width:0; height:0;
+  border-left:5px solid transparent;
+  border-right:5px solid transparent;
+  border-top:10px solid #333;
 }
 
-.pen:hover { transform: scale(1.1); }
+/* Hide cursor tip for better animation if needed */
+.pen:hover{transform: scale(1.2);}
 
 </style>
 </head>
-
 <body>
 
-<!-- Music -->
 <audio id="bgMusic" loop>
   <source src="love-music.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Envelope -->
 <div class="envelope" id="envelope">
   <div class="flap"></div>
 
@@ -162,21 +171,23 @@ body {
   </div>
 </div>
 
-<!-- Pen -->
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Fountain_pen_nib_icon.svg/512px-Fountain_pen_nib_icon.svg.png"
-class="pen" id="pen">
+<!-- Fountain Pen -->
+<div class="pen" id="pen">
+  <div class="pen-body"></div>
+  <div class="pen-nib"></div>
+</div>
 
 <script>
-const envelope = document.getElementById('envelope');
-const paper = document.getElementById('paper');
-const dialogue = document.getElementById('dialogue');
-const pen = document.getElementById('pen');
-const letterText = document.getElementById('letterText');
-const finalLine = document.getElementById('finalLine');
-const music = document.getElementById('bgMusic');
-const closeBtn = document.getElementById('closeBtn');
+const envelope=document.getElementById('envelope');
+const paper=document.getElementById('paper');
+const dialogue=document.getElementById('dialogue');
+const pen=document.getElementById('pen');
+const letterText=document.getElementById('letterText');
+const finalLine=document.getElementById('finalLine');
+const music=document.getElementById('bgMusic');
+const closeBtn=document.getElementById('closeBtn');
 
-const text = `My love,
+const text=`My love,
 
 Loving you feels like discovering home in a person.
 With you, I don’t have to rush, pretend, or hide —
@@ -194,33 +205,33 @@ it would be the ability to see yourself through my eyes —
 because then you’d know just how deeply loved you are.`;
 
 /* Open envelope */
-envelope.addEventListener('click', () => {
+envelope.addEventListener('click',()=>{
   if(!envelope.classList.contains('open')){
     envelope.classList.add('open');
-    paper.style.display = 'block';
-    dialogue.style.opacity = "1";
+    paper.style.display='block';
+    dialogue.style.opacity="1";
   }
 });
 
-/* Pen clicked = paper slides out + typing */
-pen.addEventListener('click', () => {
-  dialogue.style.opacity = "0";
+/* Pen clicked -> slide paper out + typing + music */
+pen.addEventListener('click',()=>{
+  dialogue.style.opacity="0";
   paper.classList.add('out');
   fadeInMusic();
   startWriting();
 });
 
 /* Typing effect */
-function startWriting() {
+function startWriting(){
   let i=0;
-  function type() {
+  function type(){
     if(i<text.length){
-      letterText.textContent += text.charAt(i);
-      letterText.parentElement.scrollTop = letterText.parentElement.scrollHeight;
+      letterText.textContent+=text.charAt(i);
+      letterText.parentElement.scrollTop=letterText.parentElement.scrollHeight;
       i++;
       setTimeout(type,35);
     } else {
-      finalLine.style.opacity = "1";
+      finalLine.style.opacity="1";
     }
   }
   type();
@@ -228,27 +239,25 @@ function startWriting() {
 
 /* Music fade-in */
 function fadeInMusic(){
-  music.volume = 0;
+  music.volume=0;
   music.play().catch(()=>{});
   let vol=0;
-  const fade = setInterval(()=>{
-    if(vol<0.35){
-      vol+=0.02;
-      music.volume = vol;
-    } else clearInterval(fade);
+  const fade=setInterval(()=>{
+    if(vol<0.35){vol+=0.02; music.volume=vol;}
+    else clearInterval(fade);
   },120);
 }
 
 /* Close paper & envelope */
-closeBtn.addEventListener('click', ()=>{
+closeBtn.addEventListener('click',()=>{
   paper.classList.remove('out');
-  paper.style.display = 'none';
+  paper.style.display='none';
   envelope.classList.remove('open');
-  dialogue.style.opacity = "0";
-  letterText.textContent = "";
-  finalLine.style.opacity = "0";
+  dialogue.style.opacity="0";
+  letterText.textContent="";
+  finalLine.style.opacity="0";
   music.pause();
-  music.currentTime = 0;
+  music.currentTime=0;
 });
 
 /* Floating hearts */
@@ -263,5 +272,6 @@ for(let i=0;i<30;i++){
   document.body.appendChild(heart);
 }
 </script>
+
 </body>
 </html>
