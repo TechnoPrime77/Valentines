@@ -21,7 +21,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ❤️ Floating hearts */
+/* Floating hearts */
 .heart {
   position: fixed;
   bottom: -10px;
@@ -38,7 +38,7 @@ body {
   }
 }
 
-/* 🎶 Music button */
+/* Music button */
 .music-btn {
   position: fixed;
   top: 16px;
@@ -52,7 +52,7 @@ body {
   z-index: 5;
 }
 
-/* ✉️ Envelope */
+/* Envelope */
 .envelope {
   width: 85vw;
   max-width: 360px;
@@ -71,7 +71,6 @@ body {
   transform: scale(1.05);
 }
 
-/* Flap */
 .flap {
   position: absolute;
   inset: 0;
@@ -86,18 +85,15 @@ body {
   transform: rotateX(-160deg);
 }
 
-/* Letter */
 .letter {
   position: absolute;
   inset: 8px;
   background: #ffffff;
-  padding: 18px 16px 60px;
+  padding: 25px 20px;
   border-radius: 8px;
   opacity: 0;
   transform: translateY(30px) scale(0.96);
   transition: all 0.8s cubic-bezier(.4,0,.2,1);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   z-index: 1;
 }
 
@@ -108,53 +104,34 @@ body {
 
 h1 {
   font-size: 1.2rem;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
-p {
-  font-size: 0.95rem;
-  line-height: 1.7;
-  margin-bottom: 10px;
-}
-
-/* Typing text */
+/* Typing */
 #typingLine {
-  font-size: 0.95rem;
-  margin-bottom: 12px;
-  min-height: 24px;
+  font-size: 1rem;
+  min-height: 30px;
 }
 
 /* Hidden link */
 #secretLink {
   opacity: 0;
+  margin-top: 20px;
   text-align: center;
-  margin-top: 10px;
   transition: opacity 1s ease;
+  pointer-events: none;
 }
 
 #secretLink.show {
   opacity: 1;
+  pointer-events: auto;
 }
 
 #secretLink a {
   color: #b23a5f;
   font-weight: 600;
   text-decoration: none;
-}
-
-/* ❤️ Final line */
-.love-line {
-  opacity: 0;
-  text-align: center;
-  font-size: 1.1rem;
-  margin-top: 18px;
-  transition: opacity 2s ease, transform 2s ease;
-  transform: scale(0.95);
-}
-
-.envelope.open .love-line {
-  opacity: 1;
-  transform: scale(1);
+  font-size: 1rem;
 }
 
 /* Close button */
@@ -170,7 +147,6 @@ p {
   font-size: 18px;
 }
 
-/* Hint */
 .hint {
   position: absolute;
   bottom: -40px;
@@ -184,7 +160,7 @@ p {
 
 <body>
 
-<audio id="bgMusic" loop>
+<audio id="bgMusic" loop preload="auto">
   <source src="love-music.mp3" type="audio/mpeg">
 </audio>
 
@@ -196,48 +172,18 @@ p {
   <div class="letter" onclick="event.stopPropagation()">
     <button class="close" onclick="closeLetter(event)">×</button>
 
-    <h1>My love,</h1>
+    <h1>Heyyy Ria</h1>
 
-    <!-- NEW typing line -->
-    <div id="typingLine"></div>
+    <div id="Ur prbly like not this againn.. Before u leave"></div>
 
-    <!-- Hidden link -->
-    <div id="secretLink">
-      <a href="http://chess.com/">Click here instead ❤️</a>
+    <div id="http://chess.com/">
+      <!-- PUT YOUR REAL LINK HERE -->
+      <a href="https://example.com" target="_blank">Click here❤️</a>
     </div>
-
-    <p>
-      Loving you feels like discovering home in a person.
-      With you, I don’t have to rush, pretend, or hide —
-      I simply exist, and that feels like peace.
-    </p>
-
-    <p>
-      You are my favorite thought at random hours,
-      the reason my smile appears without warning.
-      Every little thing about you finds its way into my heart
-      and settles there, comfortably.
-    </p>
-
-    <p>
-      This Valentine’s Day isn’t about grand gestures.
-      It’s about choosing you — in quiet moments,
-      in laughter, in silence, and in everything in between.
-    </p>
-
-    <p>
-      If I could give you one thing,
-      it would be the ability to see yourself through my eyes —
-      because then you’d know
-      just how deeply loved you are.
-    </p>
-
-    <div class="love-line">Forever my Valentine 💘</div>
-    <p style="text-align:right;">— Aaron</p>
 
   </div>
 
-  <div class="hint">Tap gently ❤️</div>
+  <div class="hint">Tap here ❤️</div>
 </div>
 
 <script>
@@ -247,9 +193,7 @@ const musicBtn = document.getElementById('musicBtn');
 const typingLine = document.getElementById('typingLine');
 const secretLink = document.getElementById('secretLink');
 
-let musicStarted = false;
 let typingStarted = false;
-
 const message = "prbly ur like not this again..";
 let index = 0;
 
@@ -258,12 +202,9 @@ envelope.addEventListener('click', () => {
   if (!envelope.classList.contains('open')) {
     envelope.classList.add('open');
 
-    if (!musicStarted) {
-      music.volume = 0.4;
-      music.play().catch(() => {});
-      musicStarted = true;
-      musicBtn.textContent = '⏸ Music';
-    }
+    music.volume = 0.4;
+    music.play().catch(() => {});
+    musicBtn.textContent = '⏸ Music';
 
     if (!typingStarted) {
       typingStarted = true;
@@ -272,7 +213,7 @@ envelope.addEventListener('click', () => {
   }
 });
 
-/* Typing animation */
+/* Typing */
 function typeText() {
   if (index < message.length) {
     typingLine.textContent += message.charAt(index);
@@ -283,7 +224,7 @@ function typeText() {
   }
 }
 
-/* Backspace animation */
+/* Backspace */
 function deleteText() {
   if (typingLine.textContent.length > 0) {
     typingLine.textContent =
@@ -303,7 +244,7 @@ function closeLetter(e) {
   musicBtn.textContent = '▶ Music';
 }
 
-/* Manual toggle */
+/* Manual music toggle */
 function toggleMusic() {
   if (music.paused) {
     music.play();
