@@ -70,69 +70,119 @@ body {
 </audio>
 
 <script>
-let started = false;
+const envelope = document.getElementById('envelope');
+const music = document.getElementById('bgMusic');
+const musicBtn = document.getElementById('musicBtn');
+const typingLine = document.getElementById('typingLine');
+const secretLink = document.getElementById('secretLink');
 
-function startExperience() {
-  if (started) return;
-  started = true;
+let typingStarted = false;
 
-  document.querySelector('.tap-hint').style.display = "none";
-  document.getElementById("bgMusic").play().catch(()=>{});
-
-  const textElement = document.getElementById("text");
-
-  const firstText = `Heyy Ria
+const firstMessage = `Heyy Ria
 prbly ur like not this againn...i didnt get much time to do it so ur stuck with this ig`;
 
-  const secondText = `Just kiddingg...\n`;
+const secondMessage = "Just kiddingg... Click here";
 
-  let index = 0;
+let index = 0;
 
-  function typeFirst() {
-    if (index < firstText.length) {
-      textElement.textContent += firstText.charAt(index);
-      index++;
-      setTimeout(typeFirst, 40);
+/* Open letter */
+envelope.addEventListener('click', () => {
+  if (!envelope.classList.contains('open')) {
+    envelope.classList.add('open');
+
+    music.volume = 0.4;
+    music.play().catch(() => {});
+    musicBtn.textContent = '⏸ Music';
+
+    if (!typingStarted) {
+      typingStarted = true;
+      typeFirst();
+    }
+  }
+});
+
+/* Type first message */
+function typeFirst() {
+  if (index < firstMessage.length) {
+    typingLine.textContent += firstMessage.charAt(index);
+    index++;
+    setTimeout(typeFirst, 70);
+  } else {
+    setTimeout(deleteText, 2000);
+  }
+}
+
+/* Backspace first message */
+function deleteText() {
+  if (typingLine.textContent.length > 0) {
+    typingLine.textContent =
+      typingLine.textContent.slice(0, -1);
+    setTimeout(deleteText, 40);
+  } else {
+    setTimeout(typeSecond, 500);
+  }
+}
+
+/* Type second message */
+function typeSecond() {
+  let i = 0;
+
+  function typing() {
+    if (i < secondMessage.length) {
+      typingLine.textContent += secondMessage.charAt(i);
+      i++;
+      setTimeout(typing, 70);
     } else {
-      setTimeout(deleteText, 2000);
+      showLink();
     }
   }
 
-  function deleteText() {
-    let current = textElement.textContent;
-    if (current.length > 0) {
-      textElement.textContent = current.slice(0, -1);
-      setTimeout(deleteText, 25);
-    } else {
-      setTimeout(typeSecond, 500);
-    }
-  }
+  typing();
+}
 
-  function typeSecond() {
-    let i = 0;
-    function typing() {
-      if (i < secondText.length) {
-        textElement.textContent += secondText.charAt(i);
-        i++;
-        setTimeout(typing, 40);
-      } else {
-        addLink();
-      }
-    }
-    typing();
-  }
+/* Show link */
+function showLink() {
+  secretLink.innerHTML =
+    '<a href="http://chess.com/" target="_blank">Click here</a>';
+  secretLink.classList.add('show');
+}
 
-  function addLink() {
-    const link = document.createElement("span");
-    link.textContent = "Click here";
-    link.className = "link";
-    link.onclick = function() {
-      window.location.href = "http://chess.com/";
-    };
-    textElement.appendChild(link);
-  }
+/* Close */
+function closeLetter(e) {
+  e.stopPropagation();
+  envelope.classList.remove('open');
+  music.pause();
+  music.currentTime = 0;
+  musicBtn.textContent = '▶ Music';
 
-  typeFirst();
+  // Reset everything when closed
+  typingLine.textContent = "";
+  secretLink.classList.remove('show');
+  typingStarted = false;
+  index = 0;
+}
+
+/* Manual music toggle */
+function toggleMusic() {
+  if (music.paused) {
+    music.play();
+    musicBtn.textContent = '⏸ Music';
+  } else {
+    music.pause();
+    musicBtn.textContent = '▶ Music';
+  }
+}
+
+/* Floating hearts */
+for (let i = 0; i < 30; i++) {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "❤";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.animationDuration = (6 + Math.random() * 6) + "s";
+  heart.style.opacity = Math.random();
+  heart.style.fontSize = (12 + Math.random() * 14) + "px";
+  document.body.appendChild(heart);
 }
 </script>
 
