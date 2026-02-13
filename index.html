@@ -12,30 +12,13 @@
 
 body {
   height: 100svh;
-  background: linear-gradient(135deg, #3a0f1f, #7a1f3d, #b23a5f);
+  background: linear-gradient(135deg, #3e2723, #5d4037, #8d6e63);
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: 'Playfair Display', serif;
   overflow: hidden;
   -webkit-tap-highlight-color: transparent;
-}
-
-/* Floating hearts */
-.heart {
-  position: fixed;
-  bottom: -10px;
-  color: rgba(255,255,255,0.8);
-  pointer-events: none;
-  animation: floatUp linear infinite;
-  z-index: 0;
-}
-
-@keyframes floatUp {
-  to {
-    transform: translateY(-120vh) scale(1.2);
-    opacity: 0;
-  }
 }
 
 /* Music button */
@@ -111,7 +94,7 @@ h1 {
 #typingLine {
   font-size: 1rem;
   min-height: 30px;
-  white-space: pre-line; /* preserve line breaks */
+  white-space: pre-line;
 }
 
 /* Hidden link */
@@ -129,7 +112,7 @@ h1 {
 }
 
 #secretLink a {
-  color: #b23a5f;
+  color: #8d6e63;
   font-weight: 600;
   text-decoration: none;
   font-size: 1rem;
@@ -177,9 +160,7 @@ h1 {
 
     <div id="typingLine"></div>
 
-    <div id="secretLink">
-      <!-- Link will appear here after typing -->
-    </div>
+    <div id="secretLink"></div>
 
   </div>
 
@@ -272,7 +253,6 @@ function closeLetter(e) {
   music.currentTime = 0;
   musicBtn.textContent = '▶ Music';
 
-  // Reset everything when closed
   typingLine.textContent = "";
   secretLink.classList.remove('show');
   typingStarted = false;
@@ -288,18 +268,6 @@ function toggleMusic() {
     music.pause();
     musicBtn.textContent = '▶ Music';
   }
-}
-
-/* Floating hearts */
-for (let i = 0; i < 30; i++) {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerHTML = "❤";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.animationDuration = (6 + Math.random() * 6) + "s";
-  heart.style.opacity = Math.random();
-  heart.style.fontSize = (12 + Math.random() * 14) + "px";
-  document.body.appendChild(heart);
 }
 </script>
 
