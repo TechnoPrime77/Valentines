@@ -117,6 +117,31 @@ p {
   margin-bottom: 10px;
 }
 
+/* Typing text */
+#typingLine {
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+  min-height: 24px;
+}
+
+/* Hidden link */
+#secretLink {
+  opacity: 0;
+  text-align: center;
+  margin-top: 10px;
+  transition: opacity 1s ease;
+}
+
+#secretLink.show {
+  opacity: 1;
+}
+
+#secretLink a {
+  color: #b23a5f;
+  font-weight: 600;
+  text-decoration: none;
+}
+
 /* ❤️ Final line */
 .love-line {
   opacity: 0;
@@ -159,7 +184,6 @@ p {
 
 <body>
 
-<!-- 🎶 Background Music -->
 <audio id="bgMusic" loop>
   <source src="love-music.mp3" type="audio/mpeg">
 </audio>
@@ -173,6 +197,14 @@ p {
     <button class="close" onclick="closeLetter(event)">×</button>
 
     <h1>My love,</h1>
+
+    <!-- NEW typing line -->
+    <div id="typingLine"></div>
+
+    <!-- Hidden link -->
+    <div id="secretLink">
+      <a href="#">Click here instead ❤️</a>
+    </div>
 
     <p>
       Loving you feels like discovering home in a person.
@@ -201,8 +233,8 @@ p {
     </p>
 
     <div class="love-line">Forever my Valentine 💘</div>
-
     <p style="text-align:right;">— Aaron</p>
+
   </div>
 
   <div class="hint">Tap gently ❤️</div>
@@ -212,47 +244,66 @@ p {
 const envelope = document.getElementById('envelope');
 const music = document.getElementById('bgMusic');
 const musicBtn = document.getElementById('musicBtn');
+const typingLine = document.getElementById('typingLine');
+const secretLink = document.getElementById('secretLink');
 
 let musicStarted = false;
-let fadeInterval = null;
+let typingStarted = false;
 
-/* 🎶 Fade-in music */
-function fadeInMusic() {
-  music.volume = 0;
-  music.play().catch(() => {});
-  let vol = 0;
-  fadeInterval = setInterval(() => {
-    if (vol < 0.35) {
-      vol += 0.02;
-      music.volume = vol;
-    } else {
-      clearInterval(fadeInterval);
-    }
-  }, 120);
-}
+const message = "prbly ur like not this again..";
+let index = 0;
 
-/* 📩 Open letter */
+/* Open letter */
 envelope.addEventListener('click', () => {
   if (!envelope.classList.contains('open')) {
     envelope.classList.add('open');
 
     if (!musicStarted) {
-      fadeInMusic();
+      music.volume = 0.4;
+      music.play().catch(() => {});
       musicStarted = true;
       musicBtn.textContent = '⏸ Music';
+    }
+
+    if (!typingStarted) {
+      typingStarted = true;
+      typeText();
     }
   }
 });
 
-/* ❌ Close letter */
+/* Typing animation */
+function typeText() {
+  if (index < message.length) {
+    typingLine.textContent += message.charAt(index);
+    index++;
+    setTimeout(typeText, 70);
+  } else {
+    setTimeout(deleteText, 1200);
+  }
+}
+
+/* Backspace animation */
+function deleteText() {
+  if (typingLine.textContent.length > 0) {
+    typingLine.textContent =
+      typingLine.textContent.slice(0, -1);
+    setTimeout(deleteText, 40);
+  } else {
+    secretLink.classList.add('show');
+  }
+}
+
+/* Close */
 function closeLetter(e) {
   e.stopPropagation();
   envelope.classList.remove('open');
   music.pause();
+  music.currentTime = 0;
   musicBtn.textContent = '▶ Music';
 }
 
-/* 🔊 Manual toggle */
+/* Manual toggle */
 function toggleMusic() {
   if (music.paused) {
     music.play();
@@ -263,7 +314,7 @@ function toggleMusic() {
   }
 }
 
-/* ❤️ Generate floating hearts */
+/* Floating hearts */
 for (let i = 0; i < 30; i++) {
   const heart = document.createElement("div");
   heart.className = "heart";
